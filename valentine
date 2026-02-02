@@ -1,0 +1,187 @@
+from IPython.display import HTML, display
+
+html_content = """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Be My Valentine? ❤️</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #ffe6e6;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Falling Hearts Animation */
+        .heart-fall {
+            position: absolute;
+            top: -10%;
+            color: #ff4d6d;
+            font-size: 20px;
+            user-select: none;
+            z-index: 1;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(110vh) rotate(360deg);
+            }
+        }
+
+        #card {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(255, 77, 109, 0.3);
+            position: relative;
+            width: 320px;
+            z-index: 10;
+        }
+
+        h1 { color: #ff4d6d; font-size: 28px; margin-bottom: 20px; }
+
+        .btn-container {
+            position: relative;
+            height: 150px;
+            width: 100%;
+        }
+
+        button {
+            padding: 12px 28px;
+            font-size: 18px;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.1s;
+        }
+
+        #yesBtn {
+            background-color: #ff4d6d;
+            color: white;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 20;
+        }
+
+        #noBtn {
+            background-color: #ffb3c1;
+            color: white;
+            position: absolute;
+            z-index: 15;
+            white-space: nowrap;
+        }
+
+        #success {
+            display: none;
+        }
+
+        .yay-text {
+            font-size: 26px;
+            color: #ff4d6d;
+            font-weight: bold;
+            line-height: 1.4;
+        }
+
+        .big-heart {
+            font-size: 60px;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="card">
+        <div id="ask">
+            <h1>Will you be my Valentine? ❤️</h1>
+            <div class="btn-container">
+                <button id="yesBtn" onclick="celebrate()">Yes</button>
+                <button id="noBtn">No</button>
+            </div>
+        </div>
+
+        <div id="success">
+            <div class="big-heart">💖</div>
+            <div class="yay-text">Yayyy beautiful!<br>You're my Valentine! 🌹</div>
+        </div>
+    </div>
+
+    <script>
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        const askDiv = document.getElementById('ask');
+        const successDiv = document.getElementById('success');
+        const card = document.getElementById('card');
+
+        noBtn.addEventListener('mouseover', () => {
+            const currentLeft = noBtn.offsetLeft;
+            const currentTop = noBtn.offsetTop;
+            const cardRect = card.getBoundingClientRect();
+
+            let newLeft = Math.random() * (cardRect.width - noBtn.offsetWidth);
+            let newTop = Math.random() * (cardRect.height - noBtn.offsetHeight);
+
+            // Ensure buttons don't overlap too much and stay within card
+            if (Math.abs(newLeft - yesBtn.offsetLeft) < 80 && Math.abs(newTop - yesBtn.offsetTop) < 80) {
+                newLeft = (newLeft + 100) % (cardRect.width - noBtn.offsetWidth);
+                newTop = (newTop + 100) % (cardRect.height - noBtn.offsetHeight);
+            }
+
+            noBtn.style.left = `${newLeft}px`;
+            noBtn.style.top = `${newTop}px`;
+        });
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart-fall');
+            heart.innerHTML = '❤️'; // Or any other heart emoji
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 2 + 3 + 's'; // 3 to 5 seconds
+            heart.style.opacity = Math.random();
+            heart.style.fontSize = Math.random() * 10 + 15 + 'px';
+            document.body.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 5000);
+        }
+
+        function celebrate() {
+            askDiv.style.display = 'none';
+            successDiv.style.display = 'block';
+            successDiv.style.display = 'flex';
+            successDiv.style.flexDirection = 'column';
+            successDiv.style.alignItems = 'center';
+            successDiv.style.justifyContent = 'center';
+            card.style.height = 'auto'; // Adjust card height for success message
+            card.style.padding = '60px 40px';
+
+            setInterval(createHeart, 300); // Create a new heart every 300ms
+        }
+
+    </script>
+
+</body>
+</html>
+"""
+
+display(HTML(html_content))
